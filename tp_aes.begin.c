@@ -60,6 +60,51 @@ u8 inv_s_box[16][16] = {
 	{0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61},
 	{0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}
 };
+
+#include <stdint.h>
+
+u32 sub_key[] = {
+    0xA0FAFE17, // i = 4
+    0x88542CB1, // i = 5
+    0x23A33939, // i = 6
+    0x2A6C7605, // i = 7
+    0xF2C295F2, // i = 8
+    0x7A96B943, // i = 9
+    0x5935807A, // i = 10
+    0x7359F67F, // i = 11
+    0x3D80477D, // i = 12
+    0x4716FE3E, // i = 13
+    0x1E237E44, // i = 14
+    0x6D7A883B, // i = 15
+    0xEF44A541, // i = 16
+    0xA8525B7F, // i = 17
+    0xB671253B, // i = 18
+    0xDB0BAD00, // i = 19
+    0xD4D1C6F8, // i = 20
+    0x7C839D87, // i = 21
+    0xCAF2B8BC, // i = 22
+    0x11F915BC, // i = 23
+    0x6D88A37A, // i = 24
+    0x110B3EFD, // i = 25
+    0xDBF98641, // i = 26
+    0xCA0093FD, // i = 27
+    0x4E54F70E, // i = 28
+    0x5F5FC9F3, // i = 29
+    0x84A64FB2, // i = 30
+    0x4EA6DC4F, // i = 31
+    0xEAD27321, // i = 32
+    0xB58DBAD2, // i = 33
+    0x312BF560, // i = 34
+    0x7F8D292F, // i = 35
+    0xAC7766F3, // i = 36
+    0x19FADC21, // i = 37
+    0x28D12941, // i = 38
+    0x575C006E, // i = 39
+    0xD014F9A8, // i = 40
+    0xC9EE2589, // i = 41
+    0xE13F0CC8, // i = 42
+    0xB6630CA6  // i = 43
+};
 // Les types et macros sont maintenant dans integration.h
 // Les tableaux sont dans aes_data.c
 
@@ -237,7 +282,6 @@ int main(void)
 
   u8 ciphered[16];
   u8 plained[16];
-  u32 sub_key[44];
   
   KeyExpansion(key,sub_key);
   
