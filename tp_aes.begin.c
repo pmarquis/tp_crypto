@@ -210,6 +210,34 @@ void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
     }
 }
 
+u8 xtime(u8 A){
+    u8 res;
+    if(A & (1<<7)){
+        res = (A<<1) ^ 0x1b;
+    } else {
+        res = (A<<1);
+    }
+    return res;
+}
+
+u8 gf256_mult(u8 a, u8 b)
+{
+    u8 tmp = 0;
+    u8 tabXtime[8];
+
+    tabXtime[0] = a;
+    for(u32 i = 1 ; i < 8 ; i++){
+        tabXtime[i] = xtime(tabXtime[i-1]);
+    }
+
+    for(u32 i = 0 ; i < 8 ; i++){
+      if(b & (1 << i)){
+        tmp ^= tabXtime[i];
+      }
+    }
+    return tmp;
+}
+
 /// ___________________________________________________________________________ ///
 
 void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
