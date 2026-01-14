@@ -134,30 +134,59 @@ void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
 	u8 state_out[4][Nb];
 
     input2state(in, state);
+    
+    printf("\n╔════════════════════════════════════════════════════════════╗\n");
+    printf("║                    AES CIPHER PROCESS                      ║\n");
+    printf("╚════════════════════════════════════════════════════════════╝\n\n");
+    
+    printf("┌─ Round 0: Initial AddRoundKey\n");
     AddRoundKey(state, &w[0], state_out);
 	copy_state(state_out, state);
+	display_state(state);
+	printf("\n");
+	
     for (int round = 1; round < (Nr-1); round++)
     {
+        printf("┌─ Round %d/%d ───────────────────────────────────────────────\n", round, Nr);
+        
         SubBytes(state, state_out);
-		printf("SubBytes\n");
-		display_state(state_out);
 		copy_state(state_out, state);
+		printf("│  ├─ After SubBytes:\n");
+		display_state(state);
+		
         ShiftRows(state, state_out);
 		copy_state(state_out, state);
-		printf("ShiftRows\n");
+		printf("│  ├─ After ShiftRows:\n");
 		display_state(state);
+		
         MixColumns(state, state_out);
 		copy_state(state_out, state);
-		printf("MixColumns\n");
+		printf("│  ├─ After MixColumns:\n");
 		display_state(state);
+		
         AddRoundKey(state, &w[round*4], state_out);
 		copy_state(state_out, state);
+		printf("│  └─ After AddRoundKey:\n");
+		display_state(state);
+		printf("└────────────────────────────────────────────────────────────\n\n");
     }
+    
+    printf("┌─ Final Round %d/%d ─────────────────────────────────────────\n", Nr, Nr);
     SubBytes(state, state_out);
 	copy_state(state_out, state);
+	printf("│  ├─ After SubBytes:\n");
+	display_state(state);
+	
     ShiftRows(state, state_out);
 	copy_state(state_out, state);
+	printf("│  ├─ After ShiftRows:\n");
+	display_state(state);
+	
     AddRoundKey(state, &w[Nr*Nb], state_out);
+    printf("│  └─ After AddRoundKey (Final):\n");
+	display_state(state_out);
+	printf("└────────────────────────────────────────────────────────────\n\n");
+	
     state2output(state_out, out);
 
 }
