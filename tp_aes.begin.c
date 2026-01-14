@@ -231,7 +231,7 @@ void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
     u32 i = 0;
 
     while (i < Nk) {
-        w[i] = word(key[4i], key[4i + 1], key[4i + 2], key[4i + 3]);
+        w[i] = word(key[4*i], key[4*i + 1], key[4*i + 2], key[4*i + 3]);
         i = i + 1;
     }
 
