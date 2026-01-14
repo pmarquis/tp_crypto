@@ -9,7 +9,7 @@ LDFLAGS =
 TARGET = tp_aes
 
 # Source files
-SRCS = tp_aes.begin.c integration.c
+SRCS = tp_aes.begin.c integration.c aes_data.c
 
 # Object files
 OBJS = $(SRCS:.c=.o)
