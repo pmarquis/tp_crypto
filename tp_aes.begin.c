@@ -131,28 +131,31 @@ void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
 
 void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
     u8 state[4][Nb];
+	u8 state_out[4][Nb];
 
     input2state(in, state);
-
-	for (int i = 0; i < (Nb-1); i++)
-	{
-		
-	}
-    AddRoundKey(state, &w[0], state);
+    AddRoundKey(state, &w[0], state_out);
+	copy_state(state_out, state);
     for (int round = 1; round < (Nr-1); round++)
     {
-        SubBytes(state, state);
+        SubBytes(state, state_out);
+		display_state(state_out);
+		copy_state(state_out, state);
+        ShiftRows(state, state_out);
+		copy_state(state_out, state);
 		display_state(state);
-        ShiftRows(state, state);
+        MixColumns(state, state_out);
+		copy_state(state_out, state);
 		display_state(state);
-        MixColumns(state, state);
-		display_state(state);
-        AddRoundKey(state, &w[round*4], state);
+        AddRoundKey(state, &w[round*4], state_out);
+		copy_state(state_out, state);
     }
-    SubBytes(state, state);
-    ShiftRows(state, state);
-    AddRoundKey(state, &w[Nr*Nb], state);
-    state2output(state, out);
+    SubBytes(state, state_out);
+	copy_state(state_out, state);
+    ShiftRows(state, state_out);
+	copy_state(state_out, state);
+    AddRoundKey(state, &w[Nr*Nb], state_out);
+    state2output(state_out, out);
 
 }
 
