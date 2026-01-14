@@ -140,9 +140,11 @@ void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
     for (int round = 1; round < (Nr-1); round++)
     {
         SubBytes(state, state);
-
+		display_state(state);
         ShiftRows(state, state);
+		display_state(state);
         MixColumns(state, state);
+		display_state(state);
         AddRoundKey(state, &w[round*4], state);
     }
     SubBytes(state, state);
