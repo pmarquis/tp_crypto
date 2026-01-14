@@ -169,13 +169,16 @@ void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
     for (int round = 1; round < (Nr-1); round++)
     {
         SubBytes(state, state_out);
+		printf("SubBytes\n");
 		display_state(state_out);
 		copy_state(state_out, state);
         ShiftRows(state, state_out);
 		copy_state(state_out, state);
+		printf("ShiftRows\n");
 		display_state(state);
         MixColumns(state, state_out);
 		copy_state(state_out, state);
+		printf("MixColumns\n");
 		display_state(state);
         AddRoundKey(state, &w[round*4], state_out);
 		copy_state(state_out, state);
