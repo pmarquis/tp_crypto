@@ -103,10 +103,9 @@ void display_state(u8 state[4][4])
 	  printf("0x%02X 0x%02X 0x%02X 0x%02X\n", state[r][0], state[r][1], state[r][2], state[r][3]);
 }
 
-void SubBytes(u8 in_state[4][4], u8 out_state[4][4])
-{}
 
 /// ___________________________________________________________________________ ///
+
 void ShiftRows(u8 in_state[4][4], u8 out_state[4][4])
 {}
 void InvSubBytes(u8 in_state[4][4], u8 out_state[4][4])
@@ -119,13 +118,16 @@ u8 GF256_mult(u8 a, u8 b)
 {}
 void MixColumns(u8 in_state[4][4], u8 out_state[4][4])
 {}
-
+void SubBytes(u8 in_state[4][4], u8 out_state[4][4])
+{}
 u32 RotWord(u32 in_word)
 {}
 u32 SubWord(u32 in_word)
 {}
+void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
+{}
 
-
+/// ___________________________________________________________________________ ///
 
 void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
     u8 state[4][Nb];
@@ -153,11 +155,7 @@ void Cipher(u8 in[4*Nb], u8 out[4*Nb], u32 w[Nb*(Nr+1)]) {
     state2output(state, out);
 
 }
-void KeyExpansion(u8 key[4*Nk], u32 sub_key[Nb*(Nr+1)]) {
-	(void)key;
-	(void)sub_key;
-	// TODO: implémenter KeyExpansion
-}
+
 void InvCipher(u8 in[4*Nb], u8 out[4*Nb], u32 sub_key[Nb*(Nr+1)]) {
 
 }
