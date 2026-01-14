@@ -122,15 +122,11 @@ void SubBytes(u8 in_state[4][4], u8 out_state[4][4])
 {}
 //u32 RotWord(u32 in_word)
 //{}
-u32 SubWord(u32 in_word)
-{}
-void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
-{}
+// u32 SubWord(u32 in_word)
+// {}
+// void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
+// {}
 
-u32 RotWord(u32 state_in)
-{
-    return (state_in << 8) | (state_in >> 24);
-}
 void ShiftRows(u8 in_state[4][4],u8 out_state[4][4])
 {
     u8 shift;
@@ -155,6 +151,63 @@ void AddRoundKey(u8 in_state[4][4], u32 sub_key[4], u8 out_state[4][4])
         out_state[3][c] = in_state[3][c] ^ (u8)(sub_key[c] >>  0);
 
     };
+}
+
+u32 word(u8 b0, u8 b1, u8 b2, u8 b3)
+{
+    return ((u32)b0 << 24) | ((u32)b1 << 16) | ((u32)b2 << 8) | (u32)b3;
+}
+
+u32 RotWord(u32 t)
+{
+    return (t << 8) | (t >> 24);
+}
+u32 SubWord(u32 t)
+{
+    u8 b0 = (u8)(t >> 24);
+    u8 b1 = (u8)(t >> 16);
+    u8 b2 = (u8)(t >> 8);
+    u8 b3 = (u8)(t);
+
+    u8 x, y;
+
+    x = (u8)(b0 >> 4); y = (u8)(b0 & 0x0F); b0 = s_box[x][y];
+    x = (u8)(b1 >> 4); y = (u8)(b1 & 0x0F); b1 = s_box[x][y];
+    x = (u8)(b2 >> 4); y = (u8)(b2 & 0x0F); b2 = s_box[x][y];
+    x = (u8)(b3 >> 4); y = (u8)(b3 & 0x0F); b3 = s_box[x][y];
+
+    return word(b0, b1, b2, b3);
+}
+
+
+void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
+{
+    u32 temp;
+    u32 i = 0;
+
+    while (i < Nk) {
+        w[i] = word(key[4i], key[4i + 1], key[4i + 2], key[4i + 3]);
+        i = i + 1;
+    }
+
+    i = Nk;
+
+
+    while (i < (Nb * (Nr + 1))) {
+        temp = w[i - 1];
+
+        if ((i % Nk) == 0) {
+
+            temp = SubWord(RotWord(temp)) ^ Rcon[(i / Nk) - 1];
+        }
+        else if ((Nk > 6) && ((i % Nk) == 4)) {
+
+            temp = SubWord(temp);
+        }
+
+        w[i] = w[i - Nk] ^ temp;
+        i = i + 1;
+    }
 }
 
 /// ___________________________________________________________________________ ///
