@@ -106,26 +106,56 @@ void display_state(u8 state[4][4])
 
 /// ___________________________________________________________________________ ///
 
-void ShiftRows(u8 in_state[4][4], u8 out_state[4][4])
-{}
+//void ShiftRows(u8 in_state[4][4], u8 out_state[4][4])
+//{}
 void InvSubBytes(u8 in_state[4][4], u8 out_state[4][4])
 {}
 void InvShiftRows(u8 in_state[4][4], u8 out_state[4][4])
 {}
-void AddRoundKey(u8 in_state[4][4], u32 sub_key[4], u8 out_state[4][4])
-{}
+//void AddRoundKey(u8 in_state[4][4], u32 sub_key[4], u8 out_state[4][4])
+//{}
 u8 GF256_mult(u8 a, u8 b)
 {}
 void MixColumns(u8 in_state[4][4], u8 out_state[4][4])
 {}
 void SubBytes(u8 in_state[4][4], u8 out_state[4][4])
 {}
-u32 RotWord(u32 in_word)
-{}
+//u32 RotWord(u32 in_word)
+//{}
 u32 SubWord(u32 in_word)
 {}
 void KeyExpansion(u8 key[4*Nk], u32 w[Nb*(Nr+1)])
 {}
+
+u32 RotWord(u32 state_in)
+{
+    return (state_in << 8) | (state_in >> 24);
+}
+void ShiftRows(u8 in_state[4][4],u8 out_state[4][4])
+{
+    u8 shift;
+    for(u8 i=0;i<4;i++){
+        for(u8 j=0;j<4;j++){
+            shift=i+j;
+            if(shift>=4){
+                shift=shift-4;
+            }
+            out_state[i][j]=in_state[i][shift];
+        }
+    }
+}
+
+void AddRoundKey(u8 in_state[4][4], u32 sub_key[4], u8 out_state[4][4])
+{
+    u8 c;
+    for (c = 0; c < 4; c++) {
+        out_state[0][c] = in_state[0][c] ^ (u8)(sub_key[c] >> 24);
+        out_state[1][c] = in_state[1][c] ^ (u8)(sub_key[c] >> 16);
+        out_state[2][c] = in_state[2][c] ^ (u8)(sub_key[c] >>  8);
+        out_state[3][c] = in_state[3][c] ^ (u8)(sub_key[c] >>  0);
+
+    };
+}
 
 /// ___________________________________________________________________________ ///
 
